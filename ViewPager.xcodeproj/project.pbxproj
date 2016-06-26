@@ -14,6 +14,7 @@
 		093484601D1FA23E0095A760 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 0934845E1D1FA23E0095A760 /* LaunchScreen.storyboard */; };
 		0934846B1D1FA23E0095A760 /* ViewPagerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0934846A1D1FA23E0095A760 /* ViewPagerTests.swift */; };
 		093484761D1FA23E0095A760 /* ViewPagerUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 093484751D1FA23E0095A760 /* ViewPagerUITests.swift */; };
+		093484841D1FA2910095A760 /* ViewPager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 093484831D1FA2910095A760 /* ViewPager.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -47,6 +48,7 @@
 		093484711D1FA23E0095A760 /* ViewPagerUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ViewPagerUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		093484751D1FA23E0095A760 /* ViewPagerUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewPagerUITests.swift; sourceTree = "<group>"; };
 		093484771D1FA23E0095A760 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		093484831D1FA2910095A760 /* ViewPager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ViewPager.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -97,6 +99,7 @@
 		093484541D1FA23E0095A760 /* ViewPager */ = {
 			isa = PBXGroup;
 			children = (
+				093484831D1FA2910095A760 /* ViewPager.swift */,
 				093484551D1FA23E0095A760 /* AppDelegate.swift */,
 				093484571D1FA23E0095A760 /* ViewController.swift */,
 				093484591D1FA23E0095A760 /* Main.storyboard */,
@@ -258,6 +261,7 @@
 			files = (
 				093484581D1FA23E0095A760 /* ViewController.swift in Sources */,
 				093484561D1FA23E0095A760 /* AppDelegate.swift in Sources */,
+				093484841D1FA2910095A760 /* ViewPager.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
