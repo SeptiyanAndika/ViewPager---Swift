@@ -11,12 +11,15 @@ import UIKit
 protocol  ViewPagerDataSource {
     func numberOfItems(viewPager:ViewPager) -> Int
     func viewAtIndex(viewPager:ViewPager, index:Int, view:UIView?) -> UIView
+    
 }
 
 class ViewPager: UIView {
     
     var pageControl:UIPageControl = UIPageControl()
     var scrollView:UIScrollView = UIScrollView()
+    var currentPosition:Int = 1
+    
     var dataSource:ViewPagerDataSource? = nil {
         didSet {
           reloadData()
@@ -162,7 +165,6 @@ class ViewPager: UIView {
         view.frame = CGRect(x: self.scrollView.frame.width*CGFloat(index), y: 0, width: self.scrollView.frame.width, height: self.scrollView.frame.height);
     }
     
-    
    
 }
 
@@ -172,8 +174,38 @@ extension ViewPager:UIScrollViewDelegate{
         
         let pageNumber = round(scrollView.contentOffset.x / scrollView.frame.size.width)
         pageControl.currentPage = Int(pageNumber)
+        currentPosition = pageControl.currentPage
         reloadViews(Int(pageNumber));
     }
     
+    
+}
+
+extension ViewPager{
+    
+    
+    func animationNext(){
+    NSTimer.scheduledTimerWithTimeInterval(2, target: self, selector: #selector(ViewPager.moveToNextPage), userInfo: nil, repeats: true)
+    }
+    func moveToNextPage (){
+        if(currentPosition <= numberOfItems && currentPosition > 0) {
+            scrollToPage(currentPosition)
+            currentPosition = currentPosition + 1
+            if currentPosition > numberOfItems {
+                currentPosition = 1
+            }
+        }
+    }
+    
+    func scrollToPage(index:Int) {
+        if(index <= numberOfItems && index > 0) {
+            let zIndex = index - 1
+            let iframe = CGRect(x: self.scrollView.frame.width*CGFloat(zIndex), y: 0, width: self.scrollView.frame.width, height: self.scrollView.frame.height);
+            scrollView.setContentOffset(iframe.origin, animated: true)
+            pageControl.currentPage = zIndex
+            reloadViews(zIndex)
+            currentPosition = index
+        }
+    }
     
 }
