@@ -15,14 +15,18 @@ class ViewController: UIViewController {
         super.viewDidLoad()
         viewPager.dataSource = self;
         // Do any additional setup after loading the view, typically from a nib.
+        viewPager.animationNext()
+    }
+    
+    override func viewDidAppear(animated: Bool) {
+        super.viewDidAppear(animated)
+        viewPager.scrollToPage(0)
     }
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
-
-
 }
 
 
