@@ -8,37 +8,38 @@
 
 import UIKit
 
-protocol  ViewPagerDataSource {
+@objc public protocol  ViewPagerDataSource {
     func numberOfItems(viewPager:ViewPager) -> Int
     func viewAtIndex(viewPager:ViewPager, index:Int, view:UIView?) -> UIView
+    optional func didSelectedItem(index:Int)
     
 }
 
-class ViewPager: UIView {
+public class ViewPager: UIView {
     
     var pageControl:UIPageControl = UIPageControl()
     var scrollView:UIScrollView = UIScrollView()
-    var currentPosition:Int = 1
+    var currentPosition:Int = 0
     
     var dataSource:ViewPagerDataSource? = nil {
         didSet {
-          reloadData()
+            reloadData()
         }
     }
     
     var numberOfItems:Int = 0
     var itemViews:Dictionary<Int, UIView> = [:]
     
-    required  init?(coder aDecoder: NSCoder) {
+    required  public init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
         setupView()
     }
     
     override init(frame: CGRect) {
-         super.init(frame: frame)
-         setupView()
+        super.init(frame: frame)
+        setupView()
     }
-   
+    
     func setupView() {
         self.addSubview(scrollView)
         self.addSubview(pageControl)
@@ -56,8 +57,8 @@ class ViewPager: UIView {
         scrollView.delegate = self;
         let topContraints = NSLayoutConstraint(item: scrollView, attribute:
             .Top, relatedBy: .Equal, toItem: self,
-                     attribute: NSLayoutAttribute.Top, multiplier: 1.0,
-                     constant: 0)
+                  attribute: NSLayoutAttribute.Top, multiplier: 1.0,
+                  constant: 0)
         
         let bottomContraints = NSLayoutConstraint(item: scrollView, attribute:
             .Bottom, relatedBy: .Equal, toItem: self,
@@ -86,7 +87,7 @@ class ViewPager: UIView {
         self.pageControl.pageIndicatorTintColor = UIColor.lightGrayColor()
         self.pageControl.currentPageIndicatorTintColor = UIColor.greenColor()
         
-      
+        
         let heightContraints = NSLayoutConstraint(item: pageControl, attribute:
             .Height, relatedBy: .Equal, toItem: nil,
                      attribute: NSLayoutAttribute.NotAnAttribute, multiplier: 1.0,
@@ -119,30 +120,35 @@ class ViewPager: UIView {
         }
         self.pageControl.numberOfPages = numberOfItems
         
+        itemViews.removeAll()
         for view in self.scrollView.subviews {
             view.removeFromSuperview()
         }
         
         dispatch_async(dispatch_get_main_queue()) {
             self.scrollView.contentSize = CGSizeMake(self.scrollView.frame.width *  CGFloat(self.numberOfItems) , self.scrollView.frame.height)
-              self.reloadViews(0)
+            self.reloadViews(0)
         }
-      
+        
     }
     
     func loadViewAtIndex(index:Int){
         let view:UIView?
         if(dataSource != nil){
-          view =  (dataSource?.viewAtIndex(self, index: index, view: itemViews[index]))!
+            view =  (dataSource?.viewAtIndex(self, index: index, view: itemViews[index]))!
         }else{
             view = UIView()
         }
         
         setFrameForView(view!, index: index);
-       
-      
+        
+        
         if(itemViews[index] == nil){
             itemViews[index] = view
+            let tap = UITapGestureRecognizer(target: self, action:  #selector(self.handleTapSubView))
+            tap.numberOfTapsRequired = 1
+            itemViews[index]!.addGestureRecognizer(tap)
+            
             scrollView.addSubview(itemViews[index]!)
         }else{
             itemViews[index] = view
@@ -150,27 +156,34 @@ class ViewPager: UIView {
         
     }
     
+    func handleTapSubView() {
+        if(dataSource?.didSelectedItem != nil){
+            dataSource?.didSelectedItem!(currentPosition)
+        }
+    }
+    
+    
     func reloadViews(index:Int){
         
         for i in (index-1)...(index+1) {
-            if(i>=0 || i<numberOfItems){
-                  loadViewAtIndex(i);
+            if(i>=0 && i<numberOfItems){
+                loadViewAtIndex(i);
             }
         }
-      
-       // print(scrollView.subviews.count)
+        
+        // print(scrollView.subviews.count)
     }
     
     func setFrameForView(view:UIView,index:Int){
         view.frame = CGRect(x: self.scrollView.frame.width*CGFloat(index), y: 0, width: self.scrollView.frame.width, height: self.scrollView.frame.height);
     }
     
-   
+    
 }
 
 extension ViewPager:UIScrollViewDelegate{
     
-    func scrollViewDidEndDecelerating(scrollView: UIScrollView) {
+    public func scrollViewDidEndDecelerating(scrollView: UIScrollView) {
         
         let pageNumber = round(scrollView.contentOffset.x / scrollView.frame.size.width)
         pageControl.currentPage = Int(pageNumber)
@@ -185,7 +198,7 @@ extension ViewPager{
     
     
     func animationNext(){
-    NSTimer.scheduledTimerWithTimeInterval(2, target: self, selector: #selector(ViewPager.moveToNextPage), userInfo: nil, repeats: true)
+        NSTimer.scheduledTimerWithTimeInterval(2, target: self, selector: #selector(ViewPager.moveToNextPage), userInfo: nil, repeats: true)
     }
     func moveToNextPage (){
         if(currentPosition <= numberOfItems && currentPosition > 0) {

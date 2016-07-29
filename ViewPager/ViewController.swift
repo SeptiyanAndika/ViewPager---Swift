@@ -56,6 +56,11 @@ extension ViewController:ViewPagerDataSource{
         
         return newView!
     }
+    
+    func didSelectedItem(index: Int) {
+        print("select index \(index)")
+    }
+   
 }
 
 extension CGFloat {

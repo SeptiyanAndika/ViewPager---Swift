@@ -18,6 +18,11 @@ Return the number of items (views) in the Viewpager.
 
 Return a view to be displayed at the specified index in the ViewPager. The `view` argument, where views that have previously been displayed in the ViewPager are passed back to the method to be recycled. If this argument is not nil, you can set its properties and return it instead of creating a new view instance, which will slightly improve performance.
 
+    func didSelectedItem(index:Int)
+
+Callback when ViewPager clicked, return the number of items (views) in the Viewpager.
+
+
 # Example
 ViewController:
 
@@ -58,6 +63,11 @@ extension ViewController :
         return newView!
     }
     }
+
+    func didSelectedItem(index: Int) {
+        print("select index \(index)")
+    }
+
   
 ## License
 
