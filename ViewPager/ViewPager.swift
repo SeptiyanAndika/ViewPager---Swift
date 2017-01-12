@@ -183,12 +183,19 @@ public class ViewPager: UIView {
 
 extension ViewPager:UIScrollViewDelegate{
     
-    public func scrollViewDidEndDecelerating(scrollView: UIScrollView) {
-        
-        let pageNumber = round(scrollView.contentOffset.x / scrollView.frame.size.width)
+    //http://stackoverflow.com/a/1857162
+    public func scrollViewDidScroll(scrollView: UIScrollView) {
+        NSObject.cancelPreviousPerformRequestsWithTarget(scrollView)
+        self.performSelector(#selector(self.scrollViewDidEndScrollingAnimation(_:)), withObject: scrollView, afterDelay: 0.3)
+    }
+    
+    public func scrollViewDidEndScrollingAnimation(scrollView: UIScrollView) {
+        NSObject.cancelPreviousPerformRequestsWithTarget(self)
+        var pageNumber = round(scrollView.contentOffset.x / scrollView.frame.size.width)
+        pageNumber = pageNumber + 1
         pageControl.currentPage = Int(pageNumber)
         currentPosition = pageControl.currentPage
-        reloadViews(Int(pageNumber));
+        scrollToPage(Int(pageNumber))
     }
     
     
