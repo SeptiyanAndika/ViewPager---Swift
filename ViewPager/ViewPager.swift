@@ -5,7 +5,6 @@
 //  Created by Septiyan Andika on 6/26/16.
 //  Copyright © 2016 sailabs. All rights reserved.
 //
-
 import UIKit
 
 @objc public protocol  ViewPagerDataSource {
@@ -57,12 +56,12 @@ public class ViewPager: UIView {
         scrollView.delegate = self;
         let topContraints = NSLayoutConstraint(item: scrollView, attribute:
             .top, relatedBy: .equal, toItem: self,
-                  attribute: NSLayoutAttribute.top, multiplier: 1.0,
+                  attribute: NSLayoutConstraint.Attribute.top, multiplier: 1.0,
                   constant: 0)
         
         let bottomContraints = NSLayoutConstraint(item: scrollView, attribute:
             .bottom, relatedBy: .equal, toItem: self,
-                     attribute: NSLayoutAttribute.bottom, multiplier: 1.0,
+                     attribute: NSLayoutConstraint.Attribute.bottom, multiplier: 1.0,
                      constant: 0)
         
         let leftContraints = NSLayoutConstraint(item: scrollView, attribute:
@@ -90,12 +89,12 @@ public class ViewPager: UIView {
         
         let heightContraints = NSLayoutConstraint(item: pageControl, attribute:
             .height, relatedBy: .equal, toItem: nil,
-                     attribute: NSLayoutAttribute.notAnAttribute, multiplier: 1.0,
+                     attribute: NSLayoutConstraint.Attribute.notAnAttribute, multiplier: 1.0,
                      constant: 25)
         
         let bottomContraints = NSLayoutConstraint(item: pageControl, attribute:
             .bottom, relatedBy: .equal, toItem: self,
-                     attribute: NSLayoutAttribute.bottom, multiplier: 1.0,
+                     attribute: NSLayoutConstraint.Attribute.bottom, multiplier: 1.0,
                      constant: 0)
         
         let leftContraints = NSLayoutConstraint(item: pageControl, attribute:
@@ -155,7 +154,7 @@ public class ViewPager: UIView {
         
     }
     
-    func handleTapSubView() {
+    @objc func handleTapSubView() {
         if(dataSource?.didSelectedItem != nil){
             dataSource?.didSelectedItem!(index: currentPosition)
         }
@@ -205,7 +204,7 @@ extension ViewPager{
     func animationNext(){
         Timer.scheduledTimer(timeInterval: 2, target: self, selector: #selector(ViewPager.moveToNextPage), userInfo: nil, repeats: true)
     }
-    func moveToNextPage (){
+    @objc func moveToNextPage (){
         if(currentPosition <= numberOfItems && currentPosition > 0) {
             scrollToPage(index: currentPosition)
             currentPosition = currentPosition + 1
